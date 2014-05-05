@@ -1,0 +1,12 @@
+{
+  "name": "reglex",
+  "version": "0.0.0",
+  "description": "Small regex-based lexer.",
+  "main": "src/index.coffee",
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^2.4.1",
+    "backbone": "^1.1.2"
+  }
+}
