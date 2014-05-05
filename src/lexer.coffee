@@ -57,7 +57,7 @@ class Lexer
           context.content = if match.length is 1 then match[0] else match[..]
 
           # Allow registered callbacks to interfere.
-          @trigger rule.name, {context, text, tokens}
+          @trigger context.name, {context, text, tokens}
 
           unless context.ignore is on
             tokens.push
