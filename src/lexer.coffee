@@ -19,6 +19,7 @@ class Lexer
   rule: (name, options) ->
     rule = name
 
+    # Allow some flexibility on inputs.
     if arguments.length > 1
       rule = {name}
 
@@ -27,10 +28,19 @@ class Lexer
 
       _.extend rule, options
 
-    unless rule.name? and (rule.regex? or rule.callback?)
-      throw "Error: Rule needs a name, regex and/or callback."
+    # Check for basic requirements.
+    unless rule.name? and rule.regex?
+      throw "Error: Rule '#{rule.name or rule.regex}' needs both a name
+        and regex."
 
+    # Register callback if possible.
+    @on rule.name, rule.callback if rule.callback?
+
+    # Save references in @rules.
     @rules.push rule
+    @rules[name] = rule
+
+    return @
 
   # 
   # Scan the input text and return a list of tokens.
@@ -39,19 +49,27 @@ class Lexer
     rules ?= @rules
     tokens = []
 
-    while text?.length
-      length = text.length
-
+    # Process rules against text until it's chomped gone.
+    while length = text?.length
       for rule in rules
         if match = text.match rule.regex
-          content = if match.length is 1 then match[0] else match[..]
+          context = _.clone rule
+          context.content = if match.length is 1 then match[0] else match[..]
 
-          unless rule.ignore
+          # Allow registered callbacks to interfere.
+          @trigger rule.name, {
+            context
+            text
+            tokens
+          }
+
+          unless context.ignore is on
             tokens.push
-              type: rule.name
-              content: content
+              type: context.name
+              content: context.content
 
-          text = text[match[0].length..]
+          unless context.chomp is off
+            text = text[match[0].length..]
 
       if length is text.length
         throw "Error: No rules match the following:\n#{text}"
