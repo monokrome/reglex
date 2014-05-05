@@ -22,7 +22,6 @@ class Lexer
     if arguments.length > 1
       rule = {name}
 
-      # TODO String regex support
       if _.isRegExp(options) or _.isArray options
         options = {regex: options}
 
@@ -45,15 +44,17 @@ class Lexer
 
       for rule in rules
         if match = text.match rule.regex
-          text = text[match[0].length..]
+          content = if match.length is 1 then match[0] else match[..]
 
           unless rule.ignore
             tokens.push
               type: rule.name
-              content: match[0]
+              content: content
+
+          text = text[match[0].length..]
 
       if length is text.length
-        throw "Error: No rules match the following:\n#{text[..89]}..."
+        throw "Error: No rules match the following:\n#{text}"
 
     return tokens
 
