@@ -1,9 +1,9 @@
 {
   "name": "reglex",
-  "version": "0.0.0",
-  "description": "Small regex-based lexer.",
+  "version": "0.0.1",
+  "description": "Simple, small, extensible regex-based lexer.",
   "main": "src/index.coffee",
-  "author": "",
+  "author": "Justin Krueger <justin@kroo.gs>",
   "license": "MIT",
   "dependencies": {
     "lodash": "^2.4.1",
