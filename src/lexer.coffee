@@ -3,7 +3,7 @@ _ = _ or require 'lodash'
 
 
 #
-# Lexer
+# reglex.Lexer
 #
 # Small and experimental regex-powered lexer.
 # 
@@ -57,11 +57,7 @@ class Lexer
           context.content = if match.length is 1 then match[0] else match[..]
 
           # Allow registered callbacks to interfere.
-          @trigger rule.name, {
-            context
-            text
-            tokens
-          }
+          @trigger rule.name, {context, text, tokens}
 
           unless context.ignore is on
             tokens.push
@@ -71,6 +67,7 @@ class Lexer
           unless context.chomp is off
             text = text[match[0].length..]
 
+      # Can't keep trying if no rules match.
       if length is text.length
         throw "Error: No rules match the following:\n#{text}"
 
