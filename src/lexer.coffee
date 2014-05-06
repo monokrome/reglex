@@ -52,12 +52,19 @@ class Lexer
     # Process rules against text until it's chomped gone.
     while length = text?.length
       for rule in rules
-        if match = text.match rule.regex
-          context = _.clone rule
+        match = null
 
+        # Try multiple regexes for this rule.
+        if rule.regex.length
+          for regex in rule.regex
+            break if match = text.match rule.regex
+
+        if match ?= text.match rule.regex
           # Content shouldn't ever be a list with one item.
-          context.content = match[1] or match[0]
-          context.content = match[1..] if match[2]?
+          content = if match[2]? then match[1..] else match[1] or match[0]
+
+          # Create a context and add match and content to it.
+          context = _.extend _.clone(rule), {match, content}
 
           # Allow registered callbacks to interfere.
           @trigger context.name, {context, text, tokens}
