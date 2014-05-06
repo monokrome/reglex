@@ -1,5 +1,5 @@
-Events = Backbone?.Events or require('backbone').Events
-_ = _ or require 'lodash'
+_ = require 'lodash'
+{Events} = require 'backbone'
 
 
 #
@@ -84,6 +84,4 @@ class Lexer
     return tokens
 
 
-module?.exports = {
-  Lexer
-}
+module.exports = {Lexer}
