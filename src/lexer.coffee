@@ -45,8 +45,7 @@ class Lexer
   # 
   # Scan the input text and return a list of tokens.
   #
-  scan: (text, rules) ->
-    rules ?= @rules
+  scan: (text, rules=@rules) ->
     tokens = []
 
     # Process rules against text until it's chomped gone.
@@ -64,7 +63,7 @@ class Lexer
           content = if match[2]? then match[1..] else match[1] or match[0]
 
           # Create a context and add match and content to it.
-          context = _.extend _.clone(rule), {match, content}
+          context = _.extend {}, rule, {match, content}
 
           # Allow registered callbacks to interfere.
           @trigger context.name, {context, text, tokens}
