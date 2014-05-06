@@ -1,21 +1,13 @@
+{EventEmitter} = require 'events'
 _ = require 'lodash'
-{Events} = require 'backbone'
 
 
-#
-# reglex.Lexer
-#
 # Small and experimental regex-powered lexer.
-# 
-class Lexer
+class Lexer extends EventEmitter
   constructor: ->
-    _.extend @, Events
-
     @rules = []
 
-  #
   # Create a rule and append it to @rules.
-  # 
   rule: (name, options) ->
     rule = name
 
@@ -42,39 +34,38 @@ class Lexer
 
     return @
 
-  # 
   # Scan the input text and return a list of tokens.
-  #
   scan: (text, rules=@rules) ->
     tokens = []
 
-    # Process rules against text until it's chomped gone.
+    # Process rules against text and chomp until it's gone.
     while length = text?.length
       for rule in rules
         match = null
 
-        # Try multiple regexes for this rule.
+        # Try multiple regexes if possible.
         if rule.regex.length
           for regex in rule.regex
-            break if match = text.match rule.regex
+            break if match = text.match regex
 
         if match ?= text.match rule.regex
           # Content shouldn't ever be a list with one item.
           content = if match[2]? then match[1..] else match[1] or match[0]
 
           # Create a context and add match and content to it.
-          context = _.extend {}, rule, {match, content}
+          context = _.extend {}, rule, {match, content, text, tokens}
 
           # Allow registered callbacks to interfere.
-          @trigger context.name, {context, text, tokens}
+          @emit context.name, context
 
+          # Store a copy of the token unless told not to.
           unless context.ignore is on
             tokens.push
               type: context.name
               content: context.content
 
-          # Only chomp if we are allowed and haven't already.
-          unless context.chomp is off or length isnt text.length
+          # Only chomp if allowed and haven't already.
+          unless context.chomp is off and length is text.length
             text = text[match[0].length..]
 
       # Can't keep trying if no rules match.
