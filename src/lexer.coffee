@@ -54,7 +54,10 @@ class Lexer
       for rule in rules
         if match = text.match rule.regex
           context = _.clone rule
-          context.content = if match.length is 1 then match[0] else match[..]
+
+          # Content shouldn't ever be a list with one item.
+          context.content = match[1] or match[0]
+          context.content = match[1..] if match[2]?
 
           # Allow registered callbacks to interfere.
           @trigger context.name, {context, text, tokens}
@@ -64,7 +67,8 @@ class Lexer
               type: context.name
               content: context.content
 
-          unless context.chomp is off
+          # Only chomp if we are allowed and haven't already.
+          unless context.chomp is off or length isnt text.length
             text = text[match[0].length..]
 
       # Can't keep trying if no rules match.
