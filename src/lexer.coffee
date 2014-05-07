@@ -50,7 +50,7 @@ class Lexer extends EventEmitter
           # Create a context for callbacks to manipulate.
           context = {rule, match, text, tokens}
 
-          # Add the token to the context.
+          # Create a token and add it to the context.
           context.token =
             type: context.rule.name
 
