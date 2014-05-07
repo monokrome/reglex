@@ -32,8 +32,6 @@ class Lexer extends EventEmitter
     @rules.push rule
     @rules[name] = rule
 
-    return @
-
   # Scan the input text and return a list of tokens.
   scan: (text, rules=@rules) ->
     tokens = []
@@ -56,7 +54,7 @@ class Lexer extends EventEmitter
           context.token =
             type: context.rule.name
 
-            # Shouldn't ever be a list with one item.
+            # Allow subgroup usage but don't allow 1-length lists.
             content: if match[2]? then match[1..] else match[1] or match[0]
 
           # Allow registered callbacks to interfere.
@@ -67,7 +65,7 @@ class Lexer extends EventEmitter
           unless context.rule.ignore is on
             tokens.push context.token
 
-          # Only chomp if allowed and haven't already.
+          # Only chomp if allowed but haven't already.
           unless context.rule.chomp is off and length is text.length
             text = text[match[0].length..]
 
