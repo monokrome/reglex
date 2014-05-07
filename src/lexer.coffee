@@ -54,7 +54,7 @@ class Lexer extends EventEmitter
           context.token =
             type: context.rule.name
 
-            # Allow subgroup usage but don't allow 1-length lists.
+            # Allow subgroup usage but not 1-length lists.
             content: if match[2]? then match[1..] else match[1] or match[0]
 
           # Allow registered callbacks to interfere.
