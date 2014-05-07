@@ -49,23 +49,26 @@ class Lexer extends EventEmitter
             break if match = text.match regex
 
         if match ?= text.match rule.regex
-          # Content shouldn't ever be a list with one item.
-          content = if match[2]? then match[1..] else match[1] or match[0]
+          # Create a context for callbacks to manipulate.
+          context = {rule, match, text, tokens}
 
-          # Create a context and add match and content to it.
-          context = _.extend {}, rule, {match, content, text, tokens}
+          # Add the token to the context.
+          context.token =
+            type: context.rule.name
+
+            # Shouldn't ever be a list with one item.
+            content: if match[2]? then match[1..] else match[1] or match[0]
 
           # Allow registered callbacks to interfere.
-          @emit context.name, context
+          @emit context.token.type, context
+          @emit 'token', context
 
           # Store a copy of the token unless told not to.
-          unless context.ignore is on
-            tokens.push
-              type: context.name
-              content: context.content
+          unless context.rule.ignore is on
+            tokens.push context.token
 
           # Only chomp if allowed and haven't already.
-          unless context.chomp is off and length is text.length
+          unless context.rule.chomp is off and length is text.length
             text = text[match[0].length..]
 
       # Can't keep trying if no rules match.
