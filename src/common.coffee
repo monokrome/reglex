@@ -119,7 +119,7 @@ common =
 
 lex = (text, names=[]) ->
   lexer = new Lexer 
-  lexer.rule pommon[name] for name in names
+  lexer.rule common[name] for name in names
   lexer.scan text
 
 
