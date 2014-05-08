@@ -1,17 +1,45 @@
 {Lexer} = require './lexer'
 
 
-commonRules =
+symbols = [
+  ['square-open', '[']
+  ['square-close', ']']
+  ['paren-open', '(']
+  ['paren-close', ')']
+  ['curly-open', '{']
+  ['curly-close', '}']
+  ['pipe', '|']
+  ['question-mark', '?']
+  ['colon', ':']
+  ['comma', ',']
+  ['period', '.']
+  ['dollar', '$']
+  ['at-sign', '@']
+]
+
+
+common =
   word: /^[a-zA-Z]+/
+  identifier: /^[a-zA-Z][\w\-\.]+/
   sentence: /^\w+.+\./
   paragraph: /\w+.+\.\n\n/
   line: /\n/
   number: /^\d+/ 
   integer: /^\d+/
   float: /^\d+\.\d+/
-  symbol: /^[^\w\s\d]{1}/
   call: /^\w+\((.*)\)/
   email: /^\w+\@\w+\.\w+/
+
+  symbol:
+    regex: /^[^\w\s\d]{1}/
+    callback: (context) ->
+
+  comment:
+    ignore: on
+    regex: [
+      /^\#{3}\s*([\s\S]*?)\s*\#{3}/
+      /^\#\s*(.*)/
+    ]
 
   garbage:
     regex: /^./
@@ -21,29 +49,29 @@ commonRules =
     regex: /^\s+/
     ignore: on
 
-  # TODO Grouping, callback, and array regex
-  #group:
-  #  regex: [
-  #    /^\(([\s\S]+?)\)/
-  #    /^\[([\s\S]+?)\]/
-  #    /^\{([\s\S]+?)\}/
-  #  ]
-  #  callback: ->
+  # TODO Grouping
+  group:
+    regex: [
+      /^\(([\s\S]+?)\)/
+      /^\[([\s\S]+?)\]/
+      /^\{([\s\S]+?)\}/
+    ]
+    callback: ->
 
-  #string:
-  #  regex: [
-  #    /^".*?[^\\]"/
-  #    /^'.*?[^\\]'/
-  #  ]
+  string:
+    regex: [
+      /^".*?[^\\]"/
+      /^'.*?[^\\]'/
+    ]
 
 
-scan = (text, args) ->
+lex = (text, args) ->
   s = new Lexer 
-  s.rule arg, commonRules[arg] for arg in args
+  s.rule arg, rules[arg] for arg in args
   s.scan text
 
 
 module.exports = {
-  commonRules
-  scan
+  common
+  lex
 }

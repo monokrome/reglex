@@ -8,6 +8,7 @@ class Lexer extends EventEmitter
     @rules = []
 
   # Create a rule and append it to @rules.
+  # TODO Support regex, callback
   rule: (name, options) ->
     rule = name
 
@@ -51,11 +52,12 @@ class Lexer extends EventEmitter
           context = {rule, match, text, tokens}
 
           # Create a token and add it to the context.
-          context.token =
-            type: context.rule.name
+          context.token = [
+            context.rule.name
 
-            # Allow subgroup usage but not 1-length lists.
-            content: if match[2]? then match[1..] else match[1] or match[0]
+            # Allow regex group usage but not 1-length lists.
+            if match[2]? then match[1..] else match[1] or match[0]
+          ]
 
           # Allow registered callbacks to interfere.
           @emit context.token.type, context
