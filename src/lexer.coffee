@@ -60,7 +60,7 @@ class Lexer extends EventEmitter
           ]
 
           # Allow registered callbacks to interfere.
-          @emit context.token.type, context
+          @emit context.token[0], context
           @emit 'token', context
 
           # Store a copy of the token unless told not to.
@@ -68,8 +68,10 @@ class Lexer extends EventEmitter
             tokens.push context.token
 
           # Only chomp if allowed but haven't already.
-          unless context.rule.chomp is off and length is text.length
+          unless context.rule.chomp is off
             text = text[match[0].length..]
+
+            break
 
       # Can't keep trying if no rules match.
       if length is text.length
