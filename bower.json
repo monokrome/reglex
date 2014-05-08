@@ -1,0 +1,20 @@
+{
+  "name": "reglex",
+  "version": "0.0.1",
+  "description": "Simple, small, extensible regex-based lexer.",
+  "authors": [
+    "Justin Krueger <justin@kroo.gs>"
+  ],
+  "main": "lib/reglex.js",
+  "moduleType": [
+    "node"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
