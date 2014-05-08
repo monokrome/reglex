@@ -118,11 +118,9 @@ common =
 
 
 lex = (text, names=[]) ->
-  s = new Lexer 
-
-  s.rule common[name] for name in names
-
-  return s.scan text
+  lexer = new Lexer 
+  lexer.rule pommon[name] for name in names
+  lexer.scan text
 
 
 module.exports = {
