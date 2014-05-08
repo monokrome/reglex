@@ -117,11 +117,10 @@ common =
     ]
 
 
-lex = (text, ruleNames=[], customRules={}) ->
+lex = (text, names=[]) ->
   s = new Lexer 
 
-  s.rule name, rule for name, rule of customRules
-  s.rule name, common[name] for name in ruleNames
+  s.rule common[name] for name in names
 
   return s.scan text
 
