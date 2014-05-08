@@ -22,8 +22,8 @@ class Lexer extends EventEmitter
       _.extend rule, options
 
     # Check for basic requirements.
-    unless rule.name? and rule.regex?
-      throw "Error: Rule '#{rule.name or rule.regex}'
+    unless rule?.name? and rule?.regex?
+      throw "Error: Rule '#{rule?.name or rule?.regex}'
         needs both a name and regex."
 
     # Register callback if possible.
