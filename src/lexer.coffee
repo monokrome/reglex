@@ -1,7 +1,6 @@
 {EventEmitter} = require 'events'
 _ = require 'lodash'
 
-
 # Small and experimental regex-powered lexer.
 class Lexer extends EventEmitter
   constructor: ->
@@ -23,7 +22,7 @@ class Lexer extends EventEmitter
 
     # Check for basic requirements.
     unless rule?.name? and rule?.regex?
-      throw "Error: Rule '#{rule?.name or rule?.regex}'
+      throw "Rule '#{rule?.name or rule?.regex}'
         needs both a name and regex."
 
     # Register callback if possible.
@@ -63,11 +62,11 @@ class Lexer extends EventEmitter
           @emit context.token[0], context
           @emit 'token', context
 
-          # Store a copy of the token unless told not to.
+          # Store a copy of the token.
           unless context.rule.ignore is on
             tokens.push context.token
 
-          # Only chomp if allowed but haven't already.
+          # Chomp the matched text off.
           unless context.rule.chomp is off
             text = text[match[0].length..]
 
@@ -75,7 +74,9 @@ class Lexer extends EventEmitter
 
       # Can't keep trying if no rules match.
       if length is text.length
-        throw "Error: No rules match the following:\n#{text}"
+        throw
+          message: "Failed to match\n#{text}"
+          tokens: tokens
 
     return tokens
 
