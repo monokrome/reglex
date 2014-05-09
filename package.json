@@ -13,7 +13,9 @@
   "author": "Justin Krueger <justin@kroo.gs>",
   "license": "MIT",
   "dependencies": {
-    "coffee-script": "^1.7.1",
     "lodash": "^2.4.1"
+  },
+  "devDependencies": {
+    "coffee-script": "^1.7.1"
   }
 }
