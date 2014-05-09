@@ -10,7 +10,6 @@ reglex_sources = $(wildcard $(reglex_sources_root)*.coffee)
 reglex_targets = $(patsubst $(reglex_sources_root)%.coffee,$(reglex_dist_root)%.js,$(reglex_sources))
 
 all: $(reglex_targets)
-	echo $(reglex_targets)
 
 publish: all
 	npm publish
