@@ -34,6 +34,8 @@ class Lexer extends EventEmitter
 
   # Scan the input text and return a list of tokens.
   scan: (text, rules=@rules) ->
+    text = text.toString() unless _.isString text
+
     tokens = []
 
     # Process rules against text and chomp until it's gone.
