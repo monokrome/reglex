@@ -6,9 +6,6 @@
     "type": "git",
     "url": "git://github.com/Kroogs/reglex.git"
   },
-  "sripts": {
-    "prepublish": "make"
-  },
   "main": "lib/reglex/index.js",
   "author": "Justin Krueger <justin@kroo.gs>",
   "license": "MIT",
