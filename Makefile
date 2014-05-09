@@ -1,13 +1,25 @@
-CC=coffee
-CFLAGS=
+CC = coffee
+CFLAGS =
 
-SOURCES=$(wildcard src/*.coffee)
-TARGETS=$(patsubst src/%.coffee,lib/reglex/%.js,$(SOURCES))
+dist_root = lib/
 
-all: $(TARGETS)
+reglex_dist_root = $(dist_root)reglex/
+reglex_sources_root = src/
+
+reglex_sources = $(wildcard $(reglex_sources_root)*.coffee)
+reglex_targets = $(patsubst $(reglex_sources_root)%.coffee,$(reglex_dist_root)%.js,$(reglex_sources))
+
+all: $(reglex_targets)
+	echo $(reglex_targets)
 
 publish: all
 	npm publish
 
-lib/reglex/%.js: src/%.coffee
-	$(CC) -o $@ $(CFLAGS) -c $<
+$(reglex_dist_root)%.js: $(reglex_sources_root)%.coffee
+	$(CC) -o $(dir $@) $(CFLAGS) -c $<
+
+clean:
+	rm -rf $(dist_root)
+
+.PHONY: clean all
+
