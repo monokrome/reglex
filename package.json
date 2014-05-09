@@ -1,6 +1,6 @@
 {
   "name": "reglex",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Simple, small, extensible regex-based lexer.",
   "repository": {
     "type": "git",
@@ -10,7 +10,7 @@
   "author": "Justin Krueger <justin@kroo.gs>",
   "license": "MIT",
   "dependencies": {
-    "lodash": "^2.4.1",
-    "backbone": "^1.1.2"
+    "coffee-script": "^1.7.1",
+    "lodash": "^2.4.1"
   }
 }
